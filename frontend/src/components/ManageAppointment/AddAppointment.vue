@@ -3,17 +3,16 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
             id="bootstrap-css">
 
-        <!------ Include the above in your HEAD tag ---------->
-
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
         <div class="container">
             <div class="">
+                <h1 class="card-title mt-3 text-center" style="color: rgb(48, 20, 10);">Thêm Lịch Hẹn</h1>
 
-                <article class="card-body mx-auto" style="max-width: 400px;background-color: bisque;">
-                    <h4 class="card-title mt-3 text-center">Thêm Lịch Hẹn</h4>
+                <article class="card-body" id="card1" style="max-width: 400px;background-color: rgb(247, 229, 207);">
                     <p class="card-title mt-3 text-left"><strong>1.Thông tin cá nhân</strong></p>
 
                     <form @submit.prevent>
@@ -31,7 +30,7 @@
                                 <span class="input-group-text"><i class="fa fa-calendar" style="font-size: 20px;"></i>
                                 </span>
                             </div>
-                            <input v-model="appointment.date_of_birth" class="form-control" type="date"
+                            <input v-model="appointment.date_of_birth" class="form-control" id="datepicker" type="date"
                                 placeholder="Tháng/Ngày/Năm" required>
                         </div> <!-- form-group// -->
 
@@ -55,13 +54,13 @@
                                 type="text" required>
                         </div> <!-- form-group// -->
 
+
                         <label for="fname">Giới tính:</label>
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-intersex" style="font-size: 23px;"> </i>
                                 </span>
                             </div>
-
                             <select class="form-control" v-model="appointment.gender">
                                 <option disabled value="">Chọn giới tính</option>
                                 <option value="m">Nam</option>
@@ -75,10 +74,10 @@
                                 </span>
                             </div>
                             <input class="form-control" placeholder="Chiều cao (cm)" type="text"
-                                style="max-width: 150px;" v-model="appointment.height">
+                                style="max-width: 140px;" v-model="appointment.height">
+
                             <input class="form-control" placeholder="Cân nặng (kg)" type="text"
                                 v-model="appointment.weight">
-
                         </div> <!-- form-group// -->
 
                         <label for="fname">Nhóm bệnh nhân:</label>
@@ -87,100 +86,109 @@
                                 <span class="input-group-text"> <i class="fa fa-money" style="font-size: 18px;"> </i>
                                 </span>
                             </div>
-
                             <select class="form-control" v-model="appointment.patient_group_id" required>
                                 <option disabled value="">Chọn 1 nhóm</option>
 
                                 <option v-for=" patient_group in formInfo.patient_groups " :key="patient_group.id"
                                     :value="patient_group.id">{{ patient_group.name }}</option>
-
                             </select>
                         </div> <!-- form-group end.// -->
 
-                        <p class="card-title mt-3 text-left"><strong>2.Chi tiết lịch hẹn</strong></p>
-                        <label for="fname">Lí do:</label>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-comments"> </i> </span>
-                            </div>
-
-                            <select class="form-control">
-                                <option selected="">Tiêm vaccine</option>
-                                <option>Tư vấn sức khỏe</option>
-                                <option>Khai báo y tế</option>
-                                <option>Uống Vitamin</option>
-                                <option>Khám nha khoa</option>
-                                <option>Khác</option>
-                            </select>
-                        </div> <!-- form-group end.// -->
-
-                        <label>Loại vaccine:</label>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fas fa-syringe" style="font-size: 15,5px;">
-                                    </i>
-                                </span>
-                            </div>
-
-                            <select class="form-control" v-model="appointment.vaccines" multiple>
-                                <option v-for=" (vaccine, i) in formInfo.vaccines" :key="i"
-                                    :value="{ vaccine_id : vaccine.id }">
-                                    {{vaccine.name + " x " + vaccine.number_of_doses}}
-                                </option>
-                            </select>
-
-                            <!-- <input class="form-control" placeholder="Loại vaccine" type="text" style="width: 150px;" required> -->
-
-
-                        </div> <!-- form-group// -->
-
-                        <input class="form-control" placeholder="Giá" type="text" readonly
-                            :value=" 'Giá: ' + appointment.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +' đ' ">
-
-                        <label for="fname">Ngày hẹn:</label>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-calendar" style="font-size: 19,5px;">
-                                    </i> </span>
-                            </div>
-                            <input v-model="appointment.date" class="form-control" type="date"
-                                placeholder="Tháng/Ngày/Năm" required>
-
-                        </div> <!-- form-group// -->
-
-                        <label for="fname">Giờ hẹn:</label>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-clock-o" style="font-size:19px"> </i>
-                                </span>
-                            </div>
-                            <input name="" class="form-control" type="time">
-                        </div> <!-- form-group// -->
-
-                        <label for="fname">Bác sĩ chỉ định:</label>
-                        <div class="form-group input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-user-md" style="font-size: 21px;"> </i>
-                                </span>
-                            </div>
-                            
-                            <select class="form-control" v-model="appointment.physician_id">
-                                <option disabled value="">Chọn bác sĩ</option>
-                                <option v-for="physician in formInfo.physicians" :key="physician.id"
-                                    :value="physician.id">{{ physician.name }}</option>
-
-                            </select>
-                        </div> <!-- form-group end.// -->
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block" @click="handleAdd"> Tạo lịch hẹn
-                            </button>
-                        </div> <!-- form-group// -->
-                        <div class="form-group">
-                            <b-button type="submit" class="btn btn-primary btn-block"
-                                style="background-color:red;border: none;" to="/nexus/manage-appointment"> Hủy
-                            </b-button>
-                        </div> <!-- form-group// -->
                     </form>
+                </article>
+
+                <article class="card-body" id="card2" style="max-width: 400px;background-color: rgb(247, 229, 207);">
+                    <p class="card-title mt-3 text-left"><strong>2.Chi tiết lịch hẹn</strong></p>
+                    <label for="fname">Lí do:</label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-comments"> </i> </span>
+                        </div>
+                        <select class="form-control">
+                            <option selected="">Tiêm vaccine</option>
+                            <option>Tư vấn sức khỏe</option>
+                            <option>Khai báo y tế</option>
+                            <option>Uống Vitamin</option>
+                            <option>Khám nha khoa</option>
+                            <option>Khác</option>
+                        </select>
+                    </div> <!-- form-group end.// -->
+
+                    <label for="fname">Loại vaccine:</label>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fas fa-syringe" style="font-size: 15,5px;"> </i>
+                            </span>
+                        </div>
+
+                        <select class="form-control" v-model="appointment.vaccines" multiple>
+                            <option v-for=" (vaccine, i) in formInfo.vaccines" :key="i"
+                                :value="{ vaccine_id : vaccine.id }">
+                                {{vaccine.name + " x " + vaccine.number_of_doses}}
+                            </option>
+                        </select>
+
+                        <!-- <input class="form-control currency" type="text" style="width: 140px;"> -->
+                    </div> <!-- form-group// -->
+
+                    <label for="fname">Giá tiền:</label>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-money" style="font-size: 16,5px;"> </i>
+                            </span>
+                        </div>
+                        <input class="form-control currency" readonly
+                            :value=" appointment.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') "
+                            type="text" style="width: 140px;">
+
+                        <span class="form-control" style="border-left: 1px solid #ced4da;">VNĐ</span>
+                    </div> <!-- form-group// -->
+
+                    <label for="fname">Ngày hẹn:</label>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fa fa-calendar" style="font-size: 19,5px;"></i>
+                            </span>
+                        </div>
+                        <input v-model="appointment.date" class="form-control" type="date" placeholder="Tháng/Ngày/Năm"
+                            required>
+                    </div> <!-- form-group// -->
+
+                    <label for="fname">Bác sĩ chỉ định:</label>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> <i class="fa fa-user-md" style="font-size: 21px;"> </i>
+                            </span>
+                        </div>
+
+                        <select class="form-control" v-model="appointment.physician_id">
+                            <option disabled value="">Chọn bác sĩ</option>
+                            <option v-for="physician in formInfo.physicians" :key="physician.id" :value="physician.id">
+                                {{ physician.name }}
+                            </option>
+
+                        </select>
+                    </div> <!-- form-group end.// -->
+
+                </article>
+
+                <article class="card-body" style="max-width: 200px;" id="card3">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block" @click="handleAdd">Tạo lịch hẹn
+                        </button>
+                    </div> <!-- form-group// -->
+
+                </article>
+
+                <article class="card-body" style="max-width: 200px;" id="card4">
+                    <div class="form-group">
+                        <b-button type="submit" class="btn btn-primary btn-block"
+                            style="background-color:red;border: none;" to="/nexus/manage-appointment">Hủy
+                        </b-button>
+                    </div> <!-- form-group// -->
+
                 </article>
             </div> <!-- card.// -->
 
@@ -327,6 +335,28 @@
     }
 
 
+    #card2 {
+        margin-left: 570px;
+        margin-top: -536px;
+        padding-bottom: 34px;
+        border-radius: 20px;
+    }
+
+    #card1 {
+        margin-left: 140px;
+        border-radius: 20px;
+
+    }
+
+    #card3 {
+        margin-top: 6px;
+        margin-left: 360px;
+    }
+
+    #card4 {
+        margin-top: -94px;
+        margin-left: 550px;
+    }
 
     input[type="date"]::before {
         color: #616161;

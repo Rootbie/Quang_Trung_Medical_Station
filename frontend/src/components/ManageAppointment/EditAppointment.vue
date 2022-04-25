@@ -3,163 +3,174 @@
 
         <div id="edit-appointment" :class="[ (visible === 'true') ? 'add-margin' : 'rm-margin']">
             <b-container>
-
                 <b-row class="hang hang-1">
                     <h1>Sửa thông tin lịch hẹn</h1>
                 </b-row>
-                <b-row class="hang hang-2">
-                    <h4>1. Thông tin cá nhân</h4>
-                </b-row>
 
-                <b-row class="hang hang-3">
-                    <b-col>
-                        <label class="text" for="name">Họ và tên</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="text" id="name" v-model="patient.name">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
+                <b-row>
+                    <b-col class="cot-1">
+                        <b-row class="hang hang-2">
+                            <h4>1. Thông tin cá nhân</h4>
+                        </b-row>
+                        <b-row class="hang hang-3">
+                            <b-col>
+                                <label class="text" for="name">Họ và tên</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="text" id="name" v-model="patient.name">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-4">
+                            <b-col>
+                                <label class="text" for="input-default">Ngày sinh</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="date" v-model="patient.date_of_birth"></b-form-input>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-5">
+                            <b-col>
+                                <label class="text" for="address">Địa chỉ</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="text" id="address" v-model="patient.address">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
 
-                <b-row class="hang hang-4">
-                    <b-col>
-                        <label class="text" for="dob">Ngày sinh</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="date" v-model="patient.date_of_birth"></b-form-input>
-                    </b-col>
-                </b-row>
+                        <b-row class="hang hang-6">
+                            <b-col>
+                                <label class="text" for="input-default">Số điện thoại</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="tel" id="input-default"
+                                    v-model="patient.phone_number">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-7">
+                            <b-col>
+                                <label class="text" for="weight">Cân nặng (kg)</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="text" id="weight" v-model="patient['weight(kg)']">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-8">
+                            <b-col>
+                                <label class="text" for="height">Chiều cao (cm)</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="text" id="height" v-model="patient['height(cm)']">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-9">
+                            <b-col>
+                                <label class="text" for="input-default">Giới tính</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-group>
+                                    <b-form-radio v-model="patient.gender" name="gioitinh" value="m">Nam</b-form-radio>
+                                    <b-form-radio v-model="patient.gender" name="gioitinh" value="f">Nữ</b-form-radio>
+                                </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row class="hang hang-10">
+                            <b-col>
+                                <label class="text" for="input-default">Nhóm bệnh nhân</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-radio-group v-model="appointment.patient_group_id">
+                                    <b-form-radio v-for=" patient_group in formInfo.patient_groups "
+                                        :key="patient_group.id" :value="patient_group.id" name="nhombenhnhan">
+                                        {{ patient_group.name }}
+                                    </b-form-radio>
 
-                <b-row class="hang hang-5">
-                    <b-col>
-                        <label class="text" for="address">Địa chỉ</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="text" id="address" v-model="patient.address">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
-
-                <b-row class="hang hang-6">
-                    <b-col>
-                        <label class="text" for="input-default">Số điện thoại</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="tel" id="input-default" v-model="patient.phone_number">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
-                <b-row class="hang hang-7">
-                    <b-col>
-                        <label class="text" for="weight">Cân nặng (kg)</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="text" id="weight" v-model="patient['weight(kg)']">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
-                <b-row class="hang hang-8">
-                    <b-col>
-                        <label class="text" for="height">Chiều cao (cm)</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="text" id="height" v-model="patient['height(cm)']">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
-                <b-row class="hang hang-9">
-                    <b-col>
-                        <label class="text">Giới tính</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-group>
-                            <b-form-radio v-model="patient.gender" name="gioitinh" value="m">Nam</b-form-radio>
-                            <b-form-radio v-model="patient.gender" name="gioitinh" value="f">Nữ</b-form-radio>
-                        </b-form-group>
-                    </b-col>
-                </b-row>
-                <b-row class="hang hang-10">
-                    <b-col>
-                        <label class="text">Nhóm bệnh nhân</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-radio-group v-model="appointment.patient_group_id">
-                            <b-form-radio v-for=" patient_group in formInfo.patient_groups " :key="patient_group.id"
-                                :value="patient_group.id" name="nhombenhnhan">
-                                {{ patient_group.name }}
-                            </b-form-radio>
-
-                        </b-form-radio-group>
-                    </b-col>
-                </b-row>
-                <b-row class="hang hang-11">
-                    <h4>2. Chi tiết lịch hẹn</h4>
-                </b-row>
-                <b-row class="hang hang-12">
-                    <b-col>
-                        <label class="text">Loại Vaccine</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-select class="select" multiple title="Giữ Ctrl / Command để chọn nhiều"
-                            v-model="appointment.vaccines">
-
-                            <b-form-select-option name="vaccine" v-for=" (vaccine, i) in formInfo.vaccines" :key="i"
-                                :value="{ vaccine_id : vaccine.id }">
-                                {{vaccine.name + " x " + vaccine.number_of_doses}}
-                            </b-form-select-option>
-
-                        </b-form-select>
+                                </b-form-radio-group>
+                            </b-col>
+                        </b-row>
                     </b-col>
 
+                    <b-col class="cot-2">
+
+                        <b-row class="hang hang-11">
+                            <h4>2. Chi tiết lịch hẹn</h4>
+                        </b-row>
+
+                        <b-row class="hang hang-12">
+                            <b-col>
+                                <label class="text" for="input-default">Loại Vaccine</label>
+                            </b-col>
+
+                            <b-col>
+                                <b-form-select class="select" multiple title="Giữ Ctrl / Command để chọn nhiều"
+                                    v-model="appointment.vaccines">
+
+                                    <b-form-select-option name="vaccine" v-for=" (vaccine, i) in formInfo.vaccines"
+                                        :key="i" :value="{ vaccine_id : vaccine.id }">
+                                        {{vaccine.name + " x " + vaccine.number_of_doses}}
+                                    </b-form-select-option>
+
+                                </b-form-select>
+                            </b-col>
+
+                        </b-row>
+
+                        <b-row class="hang hang-13">
+                            <b-col>
+                                <label class="text">Giá tiền</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="text" disabled
+                                    :value=" appointment.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +' VNĐ' ">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row class="hang hang-14">
+                            <b-col>
+                                <label class="text" for="input-default">Ngày hẹn</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-input class="select" type="date" v-model="appointment.date"
+                                    placeholder="Tháng/Ngày/Năm">
+                                </b-form-input>
+                            </b-col>
+                        </b-row>
+
+                        <b-row class="hang hang-15">
+                            <b-col>
+                                <label class="text" for="input-default">Bác sĩ phụ trách</label>
+                            </b-col>
+                            <b-col>
+                                <b-form-select class="select" v-model="appointment.physician_id">
+
+                                    <b-form-select-option name="physician" v-for="physician in formInfo.physicians"
+                                        :key="physician.id" :value="physician.id">
+                                        {{ physician.name }}
+                                    </b-form-select-option>
+
+                                </b-form-select>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+
                 </b-row>
 
-                <b-row class="hang hang-13">
-                    <b-col>
-                        <label class="text">Giá</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="text" disabled
-                            :value=" appointment.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +' đ' ">
-                        </b-form-input>
-                    </b-col>
-                </b-row>
-
-                <b-row class="hang hang-14">
-                    <b-col>
-                        <label class="text">Ngày hẹn</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-input class="select" type="date" v-model="appointment.date"
-                            placeholder="Tháng/Ngày/Năm"></b-form-input>
-                    </b-col>
-                </b-row>
-
-                <b-row class="hang hang-15">
-                    <b-col>
-                        <label class="text">Bác sĩ phụ trách</label>
-                    </b-col>
-                    <b-col>
-                        <b-form-select class="select" v-model="appointment.physician_id">
-
-                            <b-form-select-option name="physician" v-for="physician in formInfo.physicians"
-                                :key="physician.id" :value="physician.id">
-                                {{ physician.name }}
-                            </b-form-select-option>
-
-                        </b-form-select>
-                    </b-col>
-
-                </b-row>
 
                 <b-row class="hang hang-16">
+                    <b-col></b-col>
                     <b-col>
                         <b-button type="submit" variant="primary" @click="handleUpdate">CẬP NHẬT</b-button>
                     </b-col>
                     <b-col>
                         <b-button type="reset" variant="danger" to="/nexus/manage-appointment">HỦY</b-button>
                     </b-col>
+                    <b-col></b-col>
                 </b-row>
-
 
             </b-container>
         </div>
@@ -329,7 +340,6 @@
         display: flex;
         flex-wrap: wrap;
         font-family: Arial;
-        background-color: #c1e4f7;
     }
 
     /* increase/decrease margin*/
@@ -345,7 +355,6 @@
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        background-color: #c1e4f7;
         width: 100%;
 
     }
@@ -353,10 +362,17 @@
     .col {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
+    }
+
+    .cot-1,
+    .cot-2 {
+        border-radius: 20px;
+        background-color: rgb(247, 229, 207);
     }
 
     .row {
+        column-gap: 25px;
         justify-content: space-evenly;
     }
 

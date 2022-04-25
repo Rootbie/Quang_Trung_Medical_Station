@@ -94,7 +94,7 @@
                 this.$axios.get('http://localhost:8000/appointment')
                     .then(res => {
 
-                        // items means appointments
+                        // item means appointment
                         this.items = res.data.map(appointment => {
 
                             return {
