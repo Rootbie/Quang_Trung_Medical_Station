@@ -16,7 +16,7 @@ class Patient extends Model
     ];
 
     /**
-     * The physicians belongs to patient
+     * The physicians belong to patient.
      */
     public function physicians()
     {

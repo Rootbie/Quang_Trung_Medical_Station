@@ -85,6 +85,11 @@
                 filter: null
             }
         },
+        watch: {
+            "items": function () {
+                this.rows = this.items.length
+            }
+        },
         methods: {
             onFiltered(filteredItems) {
                 this.rows = filteredItems.length
@@ -164,10 +169,6 @@
                 document.addEventListener("showSideBar", localStorageSetHandler, false);
 
             }
-        },
-        mounted() {
-            this.rows = this.items.length
-
         },
         created() {
             this.getAppointment();

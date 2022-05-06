@@ -1,12 +1,14 @@
 <template>
-    <div id="manage-vacc-records" :class="[ (visible === 'true') ? 'add-margin' : 'rm-margin']">
+    <div id="view-vacc-records" :class="[ (visible === 'true') ? 'add-margin' : 'rm-margin']">
         <div class="danh-sach">
             <b-row class="hang-1">
                 <h1>Quản lý sổ tiêm chủng</h1>
             </b-row>
 
             <b-row class="hang-2">
-
+                <b-col class="cot-2-1">
+                    <b-button variant="outline-primary" class="them-lich">+ Lịch hẹn</b-button>
+                </b-col>
                 <b-col class="cot-2-2">
                     <b-row class="tim-kiem">
                         <b-form-input v-model="filter" type="search" placeholder="Tìm kiếm"></b-form-input>
@@ -18,10 +20,17 @@
                 <b-table hover head-variant="dark" id="my-table" :items="items" :fields="fields" :filter="filter"
                     :per-page="perPage" :current-page="currentPage" @filtered="onFiltered">
 
+                    <template #cell(status)="row">
+                        <b-form-checkbox v-model="row.item.status" disabled value="1" unchecked-value="0" size="lg">
+                        </b-form-checkbox>
+                    </template>
+
                     <template #cell(actions)="row">
                         <b-button variant="info"
-                            :to="{ name: 'viewVaccinationRecords', params: { patient_id : row.item.id } }">Chi tiết
+                            :to="{ name: 'editVaccinationRecords', params : { patient_id : row.item.patient_id } }">
+                            Chi tiết
                         </b-button>
+
                     </template>
 
                 </b-table>
@@ -30,6 +39,10 @@
             <b-row class="hang-4">
                 <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="my-table">
                 </b-pagination>
+            </b-row>
+
+            <b-row class="hang-5">
+                <b-button variant="secondary" to="/nexus/manage-vaccination-records">Trở về</b-button>
             </b-row>
         </div>
     </div>
@@ -44,13 +57,14 @@
                 items: [],
 
                 fields: [
-                    { key: 'STT', label: 'STT' },
-                    { key: 'name', label: 'Họ và tên' },
-                    { key: 'date_of_birth', label: 'Ngày sinh' },
-                    { key: 'gender', label: 'Giới tính' },
-                    { key: 'address', label: 'Địa chỉ' },
-                    { key: 'phone_number', label: 'Số điện thoại' },
-                    { key: 'actions', label: 'Tác vụ' }
+                    { key: 'id', label: "Mã lịch hẹn" },
+                    { key: 'patient_id', label: "Mã bệnh nhân" },
+                    { key: 'physician_id', label: "Mã bác sĩ phụ trách" },
+                    { key: 'date', label: "Ngày hẹn" },
+                    { key: 'formatted_total_price', label: "Chi phí" },
+                    { key: 'status', label: "Trạng thái" },
+                    { key: 'patient_group_id', label: "Nhóm bệnh nhân" },
+                    { key: "actions", label: "Tác vụ" },
                 ],
                 perPage: 5,
 
@@ -69,42 +83,54 @@
                 this.rows = filteredItems.length
                 this.currentPage = 1
             },
-            getPatient() {
-                this.$axios.get(`http://localhost:8000/patient`)
+            getAppointment() {
+                this.$axios.get(`http://localhost:8000/vaccination-record/${this.$route.params.patient_id}`)
                     .then(res => {
-                        this.items = res.data.map((patient, index) => {
-                            return {
-                                id: patient.id,
-                                STT: index + 1,
-                                name: patient.name,
-                                date_of_birth: patient.date_of_birth,
-                                gender: patient.gender,
-                                address: patient.address,
-                                phone_number: patient.phone_number
-                            }
-                        })
-                    }).catch(err => {
+                        if (res.status === 200) {
+                            this.items = res.data.map(appointment => {
+
+                                return {
+                                    id: appointment.id,
+                                    patient_id: appointment.patient_id,
+                                    physician_id: appointment.physician_id,
+                                    patient_group_id: appointment.patient_group_id,
+
+                                    date: appointment.date,
+                                    status: appointment.status,
+
+                                    total_price: appointment.total_price,
+                                    formatted_total_price: appointment.total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' đ'
+                                }
+                            })
+                        }
+                    })
+                    .catch(err => {
                         console.log(err.response.data.message)
                     })
             },
-            listenStorage() {
-                const localStorageSetHandler = (e) => {
-                    // e.value set to String because the 1st value in local storage is string
-                    (e.key === "visible") ? this.visible = String(e.value) : null
-                }
-                // Listen for changes with localStorage on the same window
-                document.addEventListener("showSideBar", localStorageSetHandler, false)
+            updateStatusCheck(appointment_id) {
+                //  @click.native="updateStatusCheck(row.item.id)" <-- pass an 'id' parameter instead of 'event' parameter
+
+                const checkedAppointment = this.items.find(item => item.id === appointment_id);
+                delete checkedAppointment['formatted_total_price'];
+
+                this.$axios.put(`http://localhost:8000/update-appointment/${appointment_id}`, checkedAppointment)
+                    .then(res => {
+                        if (res.status === 200) {
+                            console.log(res.data.message);
+                        }
+                    })
+                    .catch(err => console.log(err.response.data.message));
             }
         },
         created() {
-            this.getPatient();
-            this.listenStorage();
+            this.getAppointment()
         }
     }
 </script>
 
 <style scoped>
-    #manage-vacc-records {
+    #view-vacc-records {
         width: 100%;
         max-width: 100%;
         transition: margin-left 0.5s;
@@ -118,7 +144,7 @@
 
     /* increase/decrease margin*/
     .add-margin {
-        margin-left: 260px;
+        margin-left: 320px;
     }
 
     .rm-margin {
@@ -150,11 +176,6 @@
         left: -15px;
     }
 
-    .cot-2-2 {
-        display: flex;
-        justify-content: flex-end;
-    }
-
     .tim-kiem {
         display: flex;
         justify-content: flex-end;
@@ -172,6 +193,7 @@
 
     .hang-3 {
         display: flex;
+        justify-content: center;
     }
 
     .table {
@@ -180,13 +202,13 @@
         top: 8px;
     }
 
-    .hang-4 {
+    .hang-4, .hang-5 {
         display: flex;
         justify-content: center;
-        position: absolute;
+        /* position: absolute;
         bottom: 0;
         left: 50%;
-        right: 50%;
+        right: 50%; */
     }
 
     .btn-dark {

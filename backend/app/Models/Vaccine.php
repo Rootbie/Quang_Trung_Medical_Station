@@ -21,6 +21,6 @@ class Vaccine extends Model
     public function appointments()
     {
         return $this->belongsToMany(Appointment::class, 'vaccination_records', 'vaccine_id', 'appointment_id')
-            ->withPivot('first_dose', 'second_dose', 'third_dose', 'additional_dose', 'booster_dose');
+            ->withPivot('id', 'first_dose', 'second_dose', 'third_dose', 'additional_dose', 'booster_dose');
     }
 }

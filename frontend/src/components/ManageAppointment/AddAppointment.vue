@@ -233,9 +233,11 @@
         methods: {
 
             getFormInfo() {
-                this.$axios.get('http://localhost:8000/create-appointment').then(res => {
-                    this.formInfo = res.data;
-                }).catch(err => console.log(err))
+                this.$axios.get('http://localhost:8000/create-appointment')
+                    .then(res => {
+                        this.formInfo = res.data;
+                    })
+                    .catch(err => console.log(err))
             }
             ,
             handleAdd() {

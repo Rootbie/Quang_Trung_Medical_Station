@@ -16,7 +16,23 @@ class ManagePatient extends Controller
      */
     public function getById($id)
     {
-        return Patient::find($id);
+        $data = Patient::find($id);
+
+        if ($data) {
+            return $data;
+        }
+
+        return response(['message' => 'Patient not found']);
+    }
+
+    /**
+     * Display a listing of the patients.
+     *
+     * @return object
+     */
+    public function getAll()
+    {
+        return Patient::all();
     }
 
     /**
@@ -68,11 +84,11 @@ class ManagePatient extends Controller
             $patient->address = $request->input('address');
             $patient->phone_number = $request->input('phone_number');
 
-            if (isset( $request['weight(kg)'] )) {
+            if (isset($request['weight(kg)'])) {
                 $patient['weight(kg)'] = (float) $request->input('weight(kg)');
             }
 
-            if (isset( $request['height(cm)'] )) {
+            if (isset($request['height(cm)'])) {
                 $patient['height(cm)'] = (float) $request->input('height(cm)');
             }
 

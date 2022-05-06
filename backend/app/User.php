@@ -30,7 +30,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The patients belongs to physician
+     * The patients belong to physician
      */
     public function patients()
     {

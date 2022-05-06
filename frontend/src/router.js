@@ -21,10 +21,14 @@ import EditAppointment from './components/ManageAppointment/EditAppointment.vue'
 
 // 3. Manage vacc records
 import ManageVaccinationRecords from './components/ManageVaccinationRecords/ManageVaccinationRecords.vue'
+import ViewVaccinationRecords from './components/ManageVaccinationRecords/ViewVaccinationRecords.vue'
+import EditVaccinationRecords from './components/ManageVaccinationRecords/EditVaccinationRecords.vue'
 
 // 4. Manage vacc
 import ManageVaccines from './components/ManageVaccines/ManageVaccines.vue'
-import EditVac from './components/ManageVaccines/EditVac.vue'
+import ViewVaccine from './components/ManageVaccines/ViewVaccine.vue'
+import AddVaccine from './components/ManageVaccines/AddVaccine.vue'
+import EditVaccine from './components/ManageVaccines/EditVaccine.vue'
 
 // 5. View billing info
 import ViewBill from './components/ViewBill/ViewBill.vue'
@@ -65,10 +69,14 @@ const router = new Router({
 
                         // 3.
                         { path: 'manage-vaccination-records', component: ManageVaccinationRecords, meta: { tab: 3 } },
+                        { path: 'manage-vaccination-records/view/:patient_id', name: 'viewVaccinationRecords', component: ViewVaccinationRecords, meta: { tab: 3 } },
+                        { path: 'manage-vaccination-records/edit/:patient_id', name: 'editVaccinationRecords', component: EditVaccinationRecords, meta: { tab: 3 } },
 
                         // 4.
                         { path: 'manage-vaccines', component: ManageVaccines, meta: { tab: 4 } },
-                        { path: 'manage-vaccines/edit/:idVac', component: EditVac, meta: { tab: 4 } },
+                        { path: 'manage-vaccines/view/:vaccine_id', name: 'viewVaccine', component: ViewVaccine, meta: { tab: 4 } },
+                        { path: 'manage-vaccines/add', component: AddVaccine, meta: { tab: 4 } },
+                        { path: 'manage-vaccines/edit/:vaccine_id', name: 'editVaccine', component: EditVaccine, meta: { tab: 4 } },
 
                         // 5.
                         { path: 'view-bill', component: ViewBill, meta: { tab: 5 } },

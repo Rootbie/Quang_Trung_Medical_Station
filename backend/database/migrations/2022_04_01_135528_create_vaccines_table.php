@@ -20,7 +20,7 @@ class CreateVaccinesTable extends Migration
             $table->string('lot_number')->nullable();
             $table->integer('number_of_doses')->nullable();
             $table->integer('interval_between_doses(week)')->nullable();
-            $table->date('starting_time_of_doses')->nullable();
+            $table->string('starting_time_of_doses')->nullable();
             $table->decimal('price', 12, 2, true);
 
             $table->timestamps();
