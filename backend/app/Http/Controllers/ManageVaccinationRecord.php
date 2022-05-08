@@ -32,16 +32,17 @@ class ManageVaccinationRecord extends Controller
      * Create a new vaccination record instance
      * 
      * @param  Request  $request
+     * @param  int  $patient_id
      * @return Response
      */
-    public function addRecord(Request $request)
+    public function addRecord(Request $request, $patient_id)
     {
         // Insert into appointment table
         $appointment = Appointment::create([
             'date' => $request->input('date'),
             'status' => $request->input('status'),
             'total_price' => $request->input('total_price'),
-            'patient_id' => $request->input('patient_id'),
+            'patient_id' => $patient_id,
             'patient_group_id' => $request->input('patient_group_id'),
             'physician_id' => $request->input('physician_id')
         ]);

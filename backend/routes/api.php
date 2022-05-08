@@ -35,7 +35,7 @@ Route::post('reset-password', [NewPasswordController::class, 'resetPassword']);
 
 // manage vaccination record
 Route::get('vaccination-record/{patient_id}', [ManageVaccinationRecord::class, 'getById']);
-Route::post('add-vaccination-record', [ManageVaccinationRecord::class, 'addRecord']);
+Route::post('add-vaccination-record/{patient_id}', [ManageVaccinationRecord::class, 'addRecord']);
 Route::put('update-vaccination-record/{id}', [ManageVaccinationRecord::class, 'updateRecord']);
 
 Route::get('vaccine', [ManageVaccine::class, 'getAll']);

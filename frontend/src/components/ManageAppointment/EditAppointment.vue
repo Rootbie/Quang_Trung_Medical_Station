@@ -362,7 +362,7 @@
     .col {
         display: flex;
         flex-direction: column;
-        /* justify-content: center; */
+        justify-content: center;
     }
 
     .cot-1,

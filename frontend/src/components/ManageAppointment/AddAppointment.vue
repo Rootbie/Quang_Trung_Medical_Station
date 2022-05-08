@@ -83,9 +83,10 @@
                         <label for="fname">Nhóm bệnh nhân:</label>
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"> <i class="fa fa-money" style="font-size: 18px;"> </i>
+                                <span class="input-group-text"> <i class="fa fa-money" style="font-size: 18px;"></i>
                                 </span>
                             </div>
+
                             <select class="form-control" v-model="appointment.patient_group_id" required>
                                 <option disabled value="">Chọn 1 nhóm</option>
 
