@@ -18,24 +18,21 @@
 
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
-                    <!-- <b-nav-item href="#">ĐĂNG KÝ TIÊM</b-nav-item>
-                    <b-nav-item href="#">SỔ TIÊM CHỦNG</b-nav-item>
-                    <b-nav-item href="#">VẮC-XIN</b-nav-item>
-                    <b-nav-item href="#">PHIẾU THANH TOÁN</b-nav-item>
-                    <b-nav-item href="#">QUẢN LÝ BÁC SĨ</b-nav-item> -->
-                    <!-- <b-nav-item href="#">Bs. Phương Uyên</b-nav-item> -->
-
-
                     <b-nav-item-dropdown right>
                         <!-- Using 'button-content' slot -->
                         <template #button-content>
+                            <b-avatar :src="profile.img_src" size="2rem" variant="light"></b-avatar>
                             {{profile.name}}
                         </template>
-                        <b-dropdown-item to="/nexus/profile"> <i class="fas fa-user-circle"></i><span>Trang cá nhân</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item href="#"> <i class="fas fa-key"></i>Đổi mật khẩu</b-dropdown-item>
 
-                        <b-dropdown-item href="#" @click="logout"> 
+                        <b-dropdown-item to="/nexus/profile"> <i class="fas fa-user-circle"></i>
+                            <span>Trang cá nhân</span>
+                        </b-dropdown-item>
+                        <b-dropdown-item to="/nexus/change-password"> <i class="fas fa-key"></i>
+                            Đổi mật khẩu
+                        </b-dropdown-item>
+
+                        <b-dropdown-item href="#" @click="logout">
                             <i class="fas fa-sign-out-alt"></i>Đăng xuất
                         </b-dropdown-item>
 
@@ -58,7 +55,7 @@
             getProfile() {
                 this.$axios.get('http://localhost:8000/profile')
                     .then(res => {
-                        if (res.status === 200){
+                        if (res.status === 200) {
                             this.profile = res.data
                         }
                     })
@@ -67,9 +64,9 @@
             logout() {
                 this.$axios.post('http://localhost:8000/logout')
                     .then(res => {
-                        if (res.status === 200){
+                        if (res.status === 200) {
                             this.$router.push('/')
-                        } 
+                        }
                     })
                     .catch(err => console.log(err.response.data.message))
             }

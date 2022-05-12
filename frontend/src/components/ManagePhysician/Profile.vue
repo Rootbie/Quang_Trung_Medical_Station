@@ -8,13 +8,8 @@
                 </b-row>
                 <b-row class="hang-2">
                     <b-col class="cot-1">
-
-                        <b-avatar
-                            src="https://i1-vnexpress.vnecdn.net/2021/03/02/103650164-731814290963011-1374-5806-7233-1614677857.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=OjCwh86rBpWbN7417wYmVw"
-                            size="12rem">
-                        </b-avatar>
+                        <b-avatar :src="profile.img_src" size="12rem" variant="info"></b-avatar>
                         <h4>{{profile.name}}</h4>
-                        <b-form-file plain class="fas fa-camera"></b-form-file>
                     </b-col>
                     <!-- Form -->
                     <b-col class="cot-2">

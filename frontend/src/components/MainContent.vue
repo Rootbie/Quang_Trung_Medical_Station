@@ -17,27 +17,20 @@
                     <!-- sizes thay bằng các số 0 1 2 3 4 5 hoặc auto để thiết lập kích thước (0, 0.25, 0.5, 1, 1.5, 3) rem -->
                     <div class="p-4">
                         <b-nav pills vertical>
-                            <b-nav-item :active="tab == 1" @click="tab = 1" to="/nexus/overview">
-                                Tổng quan
-                            </b-nav-item>
 
-                            <b-nav-item :active="tab == 2" @click="tab = 2" to="/nexus/manage-appointment">
+                            <b-nav-item :active="tab == 1" @click="tab = 1" to="/nexus/manage-appointment">
                                 Đăng ký tiêm
                             </b-nav-item>
 
-                            <b-nav-item :active="tab == 3" @click="tab = 3" to="/nexus/manage-vaccination-records">
+                            <b-nav-item :active="tab == 2" @click="tab = 2" to="/nexus/manage-vaccination-records">
                                 Sổ tiêm chủng
                             </b-nav-item>
 
-                            <b-nav-item :active="tab == 4" @click="tab = 4" to="/nexus/manage-vaccines">
+                            <b-nav-item :active="tab == 3" @click="tab = 3" to="/nexus/manage-vaccines">
                                 Quản lý Vắc-xin
                             </b-nav-item>
 
-                            <b-nav-item :active="tab == 5" @click="tab = 5" to="/nexus/view-bill">
-                                Phiếu thanh toán dịch vụ
-                            </b-nav-item>
-
-                            <b-nav-item v-if="isAdmin" :active="tab == 6" @click="tab = 6" to="/nexus/manage-physician">
+                            <b-nav-item v-if="isAdmin" :active="tab == 4" @click="tab = 4" to="/nexus/manage-physician">
                                 Quản lý thông tin bác sĩ
                             </b-nav-item>
                         </b-nav>
@@ -124,7 +117,8 @@
         beforeRouteEnter(to, from, next) {
 
             switch (true) {
-                case (to.path === '/nexus/overview'):
+
+                case (to.meta.tab === 1):
                     localStorage.setItem('tabIndex', 1)
                     next()
 
@@ -142,19 +136,8 @@
 
                     break;
 
-                case (to.meta.tab === 4):
-                    localStorage.setItem('tabIndex', 4)
-                    next()
-
-                    break;
-
-                case (to.meta.tab === 5):
-                    localStorage.setItem('tabIndex', 5)
-                    next()
-                    break;
-
                 case (to.meta.requiresAuth):
-                    localStorage.setItem('tabIndex', 6)
+                    localStorage.setItem('tabIndex', 4)
 
                     next((vm) => {
                         vm.loading = true

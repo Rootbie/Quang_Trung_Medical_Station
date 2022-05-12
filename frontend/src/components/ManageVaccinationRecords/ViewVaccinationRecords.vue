@@ -32,7 +32,7 @@
                     <template #cell(actions)="row">
                         <b-button variant="info"
                             :to="{ name: 'editVaccinationRecords', params : { patient_id : row.item.patient_id, appointment_id : row.item.id } }">
-                            CHI TIẾT
+                            Chi tiết
                         </b-button>
 
                     </template>

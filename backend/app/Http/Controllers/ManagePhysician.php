@@ -8,12 +8,22 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class ManagePhysician extends Controller
-{   
-    public function user($id){
-        return User::where('id', $id)->first();
+{
+    public function user($id)
+    {
+        $physician = User::find($id);
+
+        if ($physician) {
+            $physician->img_src = asset('images/' . $physician->img_src);
+
+            return $physician;
+        }
+
+        return response(['message' => 'Physician not found'], 404);
     }
 
-    public function listUser(){
+    public function listUser()
+    {
         return User::all();
     }
 
@@ -36,6 +46,16 @@ class ManagePhysician extends Controller
         }
 
         // Part 2: Create user
+        $renameImage = '';
+
+        if ($request->hasFile('img_src')) {
+            $image = $request->file('img_src');
+            $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $renameImage = $fileName . '_' . time() . '.' . $image->getClientOriginalExtension();
+            $dest = public_path('/images');
+            $image->move($dest, $renameImage);
+        }
+
         User::create([
             'name' => $request->input('name'),
             'phone_number' => $request->input('phone_number'),
@@ -43,7 +63,8 @@ class ManagePhysician extends Controller
             'date_of_birth' => $request->input('date_of_birth'),
             'gender' => $request->input('gender'),
             'address' => $request->input('address'),
-            'ID_card_number' => $request->input('ID_card_number')
+            'ID_card_number' => $request->input('ID_card_number'),
+            'img_src' => $renameImage
         ]);
 
         return response(['message' => 'Add user successfully']);
@@ -75,17 +96,27 @@ class ManagePhysician extends Controller
 
         // Find user
         $user = User::find($id);
-        
+
         if ($user) {
-            
-            $user->name = $request->name;
-            $user->phone_number = $request->phone_number;
+
+            $user->name = $request->input('name');
+            $user->phone_number = $request->input('phone_number');
             // $user->password = Hash::make($request->password);
-            $user->gender =  $request->gender;
-            $user->date_of_birth =  $request->date_of_birth;
-            $user->address =  $request->address;
-            $user->ID_card_number =  $request->ID_card_number;
-            
+            $user->gender =  $request->input('gender');
+            $user->date_of_birth =  $request->input('date_of_birth');
+            $user->address =  $request->input('address');
+            $user->ID_card_number =  $request->input('ID_card_number');
+
+            if ($request->hasFile('img_src')) {
+                $image = $request->file('img_src');
+                $fileName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $renameImage = $fileName . '_' . time() . '.' . $image->getClientOriginalExtension();
+                $dest = public_path('/images');
+                $image->move($dest, $renameImage);
+
+                $user->img_src = $renameImage;
+            }
+
             $user->save();
             return response(['message' => 'Update successfully']);
         }

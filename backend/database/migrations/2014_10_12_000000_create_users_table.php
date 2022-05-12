@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('gender');
             $table->string('address');
             $table->string('ID_card_number')->unique();
+            $table->string('img_src')->nullable();
             $table->timestamps();
         });
     }

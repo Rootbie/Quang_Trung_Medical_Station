@@ -50,7 +50,7 @@
                     </template>
 
                     <template #cell(actions)="row">
-                        <b-button variant="primary" @click="handleSave(row.item)">LƯU</b-button>
+                        <b-button variant="primary" @click="handleSave(row.item)">Lưu</b-button>
                     </template>
                 </b-table>
 

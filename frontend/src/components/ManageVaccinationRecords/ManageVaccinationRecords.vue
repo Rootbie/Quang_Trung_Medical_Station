@@ -20,7 +20,7 @@
 
                     <template #cell(actions)="row">
                         <b-button variant="info"
-                            :to="{ name: 'viewVaccinationRecords', params: { patient_id : row.item.id } }">CHI TIẾT
+                            :to="{ name: 'viewVaccinationRecords', params: { patient_id : row.item.id } }">Chi tiết
                         </b-button>
                     </template>
 

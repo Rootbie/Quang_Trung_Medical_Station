@@ -95,7 +95,7 @@
           this.$axios.post('http://localhost:8000/login', dataReq)
             .then((res) => {
               if (res.status === 200) {
-                this.$router.push('/nexus/overview')
+                this.$router.push('/nexus/manage-appointment')
               }
 
             }).catch((err) => {

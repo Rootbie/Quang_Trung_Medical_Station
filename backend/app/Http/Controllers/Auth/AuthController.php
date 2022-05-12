@@ -33,7 +33,10 @@ class AuthController extends Controller
 
     public function me()
     {
-        return Auth::user();
+        $user = Auth::user();
+        $user->img_src = asset('images/' . $user->img_src);
+
+        return $user;
     }
 
     public function logout()

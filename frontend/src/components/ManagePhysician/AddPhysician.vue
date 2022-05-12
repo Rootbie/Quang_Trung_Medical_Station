@@ -9,14 +9,14 @@
 
                 <b-row class="hang-2">
                     <b-col class="cot-1">
-                        <!-- Update -->
+
                         <b-row class="position-relative">
-                            <b-avatar class="ava"
-                                src="https://i1-vnexpress.vnecdn.net/2021/03/02/103650164-731814290963011-1374-5806-7233-1614677857.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=OjCwh86rBpWbN7417wYmVw"
-                                size="12rem">
+                            <b-avatar class="ava" :src="preview_url" size="12rem" variant="info">
                             </b-avatar>
 
-                            <b-form-file plain class="fas fa-camera"></b-form-file>
+                            <b-form-file plain class="fas fa-camera" v-model="physician.img_src"
+                                accept=".jpg, .jpeg, .png">
+                            </b-form-file>
                         </b-row>
 
                         <b-row class="mt-3">
@@ -126,6 +126,8 @@
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
             return {
+                preview_url: '',
+
                 physician: {
                     name: '',
                     phone_number: '',
@@ -134,12 +136,18 @@
                     date_of_birth: '',
                     gender: '',
                     address: '',
-                    ID_card_number: ''
+                    ID_card_number: '',
+                    img_src: []
                 },
-                max : today,
+                max: today,
                 message: '',
                 showDismissibleAlert: false,
                 visible: localStorage.getItem('visible')
+            }
+        },
+        watch: {
+            "physician.img_src": function () {
+                this.preview_url = URL.createObjectURL(this.physician.img_src)
             }
         },
         methods: {
@@ -191,7 +199,22 @@
                     this.showDismissibleAlert = true
                 }
                 else {
-                    this.$axios.post('http://localhost:8000/addUser', this.physician)
+                    const formData = new FormData()
+
+                    formData.append('name', this.physician.name)
+                    formData.append('phone_number', this.physician.phone_number)
+                    formData.append('password', this.physician.password)
+                    formData.append('password_confirmation', this.physician.password_confirmation)
+                    formData.append('date_of_birth', this.physician.date_of_birth)
+                    formData.append('gender', this.physician.gender)
+                    formData.append('address', this.physician.address)
+                    formData.append('ID_card_number', this.physician.ID_card_number)
+                    formData.append('img_src', this.physician.img_src)
+
+                    this.$axios.post('http://localhost:8000/addUser', formData,
+                        {
+                            headers: { "Content-Type": "multipart/form-data" }
+                        })
                         .then(res => {
                             if (res.status === 200) {
                                 this.$router.push('/nexus/manage-physician')

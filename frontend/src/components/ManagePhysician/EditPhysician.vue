@@ -11,17 +11,20 @@
                     <b-col class="cot-1">
                         <!-- Update -->
                         <b-row class="position-relative">
-                            <b-avatar
-                                src="https://i1-vnexpress.vnecdn.net/2021/03/02/103650164-731814290963011-1374-5806-7233-1614677857.jpg?w=1020&h=0&q=100&dpr=1&fit=crop&s=OjCwh86rBpWbN7417wYmVw"
-                                size="12rem">
+                            <b-avatar class="ava" v-if="img_src.length !== 0" :src="preview_url" size="12rem"
+                                variant="info">
                             </b-avatar>
-                            <b-form-file plain class="fas fa-camera"></b-form-file>
+                            <b-avatar class="ava" v-else :src="physician.img_src" size="12rem" variant="info">
+                            </b-avatar>
+
+                            <b-form-file plain class="fas fa-camera" v-model="img_src" accept=".jpg, .jpeg, .png">
+                            </b-form-file>
                         </b-row>
 
                         <b-row class="mt-3 flex-grow-0 position-relative">
-                            <b-form-input id="name" type="text" v-model="name" class="px-5" ></b-form-input>
+                            <b-form-input id="name" type="text" v-model="physician.name" class="px-5"></b-form-input>
                             <!-- Combo : label and icon -->
-                            <label for="name"> <i class="fas fa-pen"></i></label> 
+                            <label for="name"> <i class="fas fa-pen"></i></label>
 
                         </b-row>
                     </b-col>
@@ -34,8 +37,9 @@
                             </b-col>
                             <b-col>
                                 <b-form-group>
-                                    <b-form-radio v-model="gender" name="gioitinh" value="m">Nam</b-form-radio>
-                                    <b-form-radio v-model="gender" name="gioitinh" value="f">Nữ</b-form-radio>
+                                    <b-form-radio v-model="physician.gender" name="gioitinh" value="m">Nam
+                                    </b-form-radio>
+                                    <b-form-radio v-model="physician.gender" name="gioitinh" value="f">Nữ</b-form-radio>
                                 </b-form-group>
                             </b-col>
                         </b-row>
@@ -45,7 +49,7 @@
                             </b-col>
                             <b-col>
                                 <!-- <b-form-input type="date" v-model="dob"></b-form-input> -->
-                                <b-form-datepicker id="dob" v-model="dob" start-weekday="1"
+                                <b-form-datepicker id="dob" v-model="physician.date_of_birth" start-weekday="1"
                                     :date-format-options="{ year: 'numeric', month: '2-digit', day: '2-digit' }"
                                     placeholder="Ngày/Tháng/Năm" locale="vi" :max="max" show-decade-nav>
                                 </b-form-datepicker>
@@ -57,7 +61,8 @@
                                 <label class="text" for="phone_number">Số điện thoại</label>
                             </b-col>
                             <b-col>
-                                <b-form-input type="tel" id="phone_number" v-model="phone_number"></b-form-input>
+                                <b-form-input type="tel" id="phone_number" v-model="physician.phone_number">
+                                </b-form-input>
                             </b-col>
                         </b-row>
                         <b-row>
@@ -65,7 +70,8 @@
                                 <label class="text" for="address">Địa chỉ</label>
                             </b-col>
                             <b-col>
-                                <b-form-textarea type="text" id="address" rows="4" no-resize v-model="address">
+                                <b-form-textarea type="text" id="address" rows="4" no-resize
+                                    v-model="physician.address">
                                 </b-form-textarea>
                             </b-col>
                         </b-row>
@@ -74,7 +80,7 @@
                                 <label class="text" for="ID_card_number">CCCD</label>
                             </b-col>
                             <b-col>
-                                <b-form-input type="text" id="ID_card_number" v-model="ID_card">
+                                <b-form-input type="text" id="ID_card_number" v-model="physician.ID_card_number">
                                 </b-form-input>
                             </b-col>
                         </b-row>
@@ -100,47 +106,53 @@
             return {
                 visible: localStorage.getItem('visible'),
 
-                name: '',
-                phone_number: '',
-                dob: '',
-                gender: '',
-                address: '',
-                ID_card: '',
+                preview_url: '',
+                img_src: [],
 
-                max : today
+                physician: {},
+
+                max: today
+            }
+        },
+        watch: {
+            "img_src": function () {
+                this.preview_url = URL.createObjectURL(this.img_src)
             }
         },
         methods: {
             getPhysicianById() {
                 this.$axios.get(`http://localhost:8000/user/${this.$route.params.id}`)
                     .then(res => {
-                        this.name = res.data.name;
-                        this.phone_number = res.data.phone_number;
-                        this.dob = res.data.date_of_birth;
-                        this.gender = res.data.gender;
-                        this.address = res.data.address;
-                        this.ID_card = res.data.ID_card_number;
+                        this.physician = res.data
                     })
                     .catch(err => console.log(err))
             },
             handleUpdate() {
-                const data = {
-                    'name': this.name,
-                    'phone_number': this.phone_number,
-                    'date_of_birth': this.dob,
-                    'gender': this.gender,
-                    'address': this.address,
-                    'ID_card_number': this.ID_card
-                }
+                const formData = new FormData()
 
-                this.$axios.put(`http://localhost:8000/updateUser/${this.$route.params.id}`, data)
+                formData.append('name', this.physician.name)
+                formData.append('phone_number', this.physician.phone_number)
+                formData.append('password', this.physician.password)
+                formData.append('password_confirmation', this.physician.password_confirmation)
+                formData.append('date_of_birth', this.physician.date_of_birth)
+                formData.append('gender', this.physician.gender)
+                formData.append('address', this.physician.address)
+                formData.append('ID_card_number', this.physician.ID_card_number)
+                formData.append('img_src', this.img_src)
+
+                this.$axios.post(`http://localhost:8000/updateUser/${this.$route.params.id}`, formData,
+                    {
+                        headers: { "Content-Type": "multipart/form-data" }
+                    })
                     .then(res => {
                         if (res.status === 200) {
-                            console.log(res.data.message);  
+
                             this.$router.push('/nexus/manage-physician')
                         }
                     })
-                    .catch(err => { console.log(err.response.data.message) })
+                    .catch(err => {
+                        console.log(err.response.data.message)
+                    })
             },
             listenStorage() {
                 const localStorageSetHandler = (e) => {

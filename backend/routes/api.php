@@ -66,6 +66,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user/{id}', [ManagePhysician::class, 'user'])->middleware(['can:admin']);
     Route::get('listUser', [ManagePhysician::class, 'listUser'])->middleware(['can:admin']);
     Route::post('addUser', [ManagePhysician::class, 'addUser'])->middleware(['can:admin']);
-    Route::put('updateUser/{id}', [ManagePhysician::class, 'updateUser'])->middleware(['can:admin']);
+    Route::post('updateUser/{id}', [ManagePhysician::class, 'updateUser'])->middleware(['can:admin']);
     Route::delete('deleteUser/{id}', [ManagePhysician::class, 'deleteUser'])->middleware(['can:admin']);
 });

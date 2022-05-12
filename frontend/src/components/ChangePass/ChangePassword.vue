@@ -1,101 +1,131 @@
 <template>
-    <div class="reset-password">
-        <h1>Thay đổi mật khẩu</h1>
-        <hr>
-        
-        <div class="input-focus-effect">
-            <input :type="[isShow ? 'text' : 'password']" placeholder=" " v-model="password">
-            <label >Mật khẩu mới</label>
-        </div>
-        
-        <div class="input-focus-effect">
-            <input :type="[isShow ? 'text' : 'password']" placeholder=" " v-model="confirm_pass">
-            <label >Nhập lại mật khẩu</label>
-        </div>
-        
-        <div class="message"> {{message_pass}} </div>
+    <div id="change-password" :class="[ (visible === 'true') ? 'add-margin' : 'rm-margin']">
+        <div class="content">
+            <h1>Thay đổi mật khẩu</h1>
 
-        <div class="showPass">
-            <label for="checkbox" class="checkbox-item">
-                <input type="checkbox" id="checkbox" @click="isShow=!isShow">Hiện mật khẩu
-                <i class="fas fa-check"></i>
-            </label>
-        </div>
+            <div class="input-focus-effect">
+                <input :type="[isShow ? 'text' : 'password']" placeholder=" " v-model="old_password">
+                <label>Mật khẩu cũ</label>
+            </div>
+
+            <div class="input-focus-effect">
+                <input :type="[isShow ? 'text' : 'password']" placeholder=" " v-model="password">
+                <label>Mật khẩu mới</label>
+            </div>
+
+            <div class="input-focus-effect">
+                <input :type="[isShow ? 'text' : 'password']" placeholder=" " v-model="confirm_pass">
+                <label>Nhập lại mật khẩu</label>
+            </div>
+
+            <div class="message"> {{message_pass}} </div>
+
+            <div class="showPass">
+                <label for="checkbox" class="checkbox-item">
+                    <input type="checkbox" id="checkbox" @click="isShow=!isShow">Hiện mật khẩu
+                    <i class="fas fa-check"></i>
+                </label>
+            </div>
 
 
-        <div class="btn">
-            <button type="button" @click="cancel">Hủy</button>
-            <button type="button" @click="resetPass">Đổi mật khẩu</button>
+            <div class="btn">
+                <button type="button" @click="$router.go(-1)">Hủy</button>
+                <button type="button" @click="changePass">Đổi mật khẩu</button>
+            </div>
         </div>
     </div>
+
 </template>
 
 <script>
-    import firebase from '../../Firebase/FirebaseInit.js';
+    import translate from 'translate'
 
     export default {
-        props: ['token'],
         data: function () {
             return {
-                isShow : false,
+                isShow: false,
+                visible: localStorage.getItem('visible'),
+
+                old_password: '',
                 password: '',
                 confirm_pass: '',
+
                 message_pass: ''
             }
         },
         methods: {
-            resetPass() {
+            changePass() {
                 this.password = this.password.trim();
                 this.confirm_pass = this.confirm_pass.trim();
 
                 if (this.password.length < 8) {
-                    return this.message_pass = 'Sử dụng 8 ký tự trở lên cho mật khẩu của bạn';
+                    return this.message_pass = 'Sử dụng 8 ký tự trở lên cho mật khẩu của bạn'
                 }
                 else if (this.confirm_pass !== this.password) {
                     return this.message_pass = 'Các mật khẩu đã nhập không khớp. Hãy thử lại.'
                 }
                 else {
-                    this.$axios.post('http://localhost:8000/reset-password', {
-                        'token': this.token,
+                    this.$axios.post(`http://localhost:8000/change-password`, {
+                        'old_password': this.old_password,
                         'password': this.password,
                         'password_confirmation': this.confirm_pass
-                    }).then(res => {
-                        if (res.status === 200) {
-                            window.alert('Thay đổi mật khẩu thành công. Mời bạn đăng nhập')
-                        }
-
-                        // Exit user from Firebase
-                        this.logout();
-                        this.$router.push('/');
-                    }).catch(err => {
-                        console.log(err);
-                    });
-
+                    })
+                        .then(res => {
+                            if (res.status === 200) {
+                                window.alert('Thay đổi mật khẩu thành công. Mời bạn đăng nhập lại')
+                                this.$router.push('/')
+                            }
+                        })
+                        .catch(async (err) => {
+                            this.message_pass = await translate(err.response.data.message, "vi");
+                        })
                 }
             },
-            logout() {
-                firebase.auth().signOut().then().catch((error) => {
-                    console.log(error.message);
-                });
-            },
-            cancel() {
-                this.logout();
-                this.$router.push('/');
+            listenStorage() {
+                const localStorageSetHandler = (e) => {
+                    // e.value set to String because the 1st value in local storage is string
+                    (e.key === "visible") ? this.visible = String(e.value) : null
+                };
+                // Listen for changes with localStorage on the same window
+                document.addEventListener("showSideBar", localStorageSetHandler, false);
             }
+        },
+        created() {
+            this.listenStorage()
         }
     }
 </script>
 
 <style scoped>
     /*container*/
-    .reset-password {
+    #change-password {
+        max-width: 100%;
+        transition: margin-left 0.5s;
+        position: relative;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        overflow: auto;
+    }
+
+    /* increase/decrease margin*/
+    .add-margin {
+        margin-left: 170px;
+    }
+
+    .rm-margin {
+        margin-left: 0px;
+    }
+
+    .content {
         margin: auto;
         width: 700px;
         font-family: 'Segoe UI', sans-serif;
         font-size: 25px;
 
         position: relative;
-        top: 100px;
         text-align: center;
     }
 
@@ -104,15 +134,15 @@
         position: relative;
         display: flex;
         flex-direction: column-reverse;
-        
+
         justify-content: center;
         align-items: center;
-        margin: 30px 0 0 0 ;
+        margin: 30px 0 0 0;
     }
 
     .input-focus-effect input {
         border: 1px solid #DDDDDD;
-        
+
         padding: 2.5rem 1rem 1rem;
         display: block;
         width: 60%;
@@ -140,7 +170,8 @@
     .input-focus-effect label {
         position: absolute;
         top: 50%;
-        left: 22.5%;  /* use % */
+        left: 22.5%;
+        /* use % */
 
         transform: translateY(-50%);
         pointer-events: none;
@@ -167,59 +198,59 @@
     }
 
     /* checkbox to show password*/
-    .showPass{
+    .showPass {
         display: flex;
         position: relative;
         font-size: 1.2rem;
 
         margin: 5px 0 0 0;
     }
-    
-    .showPass .checkbox-item{
+
+    .showPass .checkbox-item {
         display: block;
         position: absolute;
-        left : 20%;
+        left: 20%;
 
         cursor: pointer;
         overflow: hidden;
     }
-    
-    .showPass .checkbox-item #checkbox{
+
+    .showPass .checkbox-item #checkbox {
         display: none;
     }
-    
+
     .showPass .checkbox-item::before {
         content: "";
         width: 20px;
         height: 20px;
-        
+
         display: block;
         border: 1px solid #202124;
         border-radius: 2px;
-        
+
         margin-right: 10px;
         float: left;
 
         position: relative;
         top: 4px;
     }
-    
-    .showPass .checkbox-item i{
+
+    .showPass .checkbox-item i {
         position: absolute;
         left: 1px;
-        top : 27px;
-        
+        top: 27px;
+
         font-size: 1.1rem;
         color: #202124;
 
-        transition: all 0.15s linear ;
+        transition: all 0.15s linear;
         -webkit-transition: all 0.15s linear;
-        -moz-transition : all 0.15s linear;
+        -moz-transition: all 0.15s linear;
         -ms-transition: all 0.15s linear;
         -o-transition: all 0.15s linear;
     }
 
-    .showPass .checkbox-item #checkbox:checked~i{
+    .showPass .checkbox-item #checkbox:checked~i {
         left: 1px;
         top: 5px;
     }
@@ -245,5 +276,4 @@
         border-color: #555;
         transition: 0.5s;
     }
-
 </style>
