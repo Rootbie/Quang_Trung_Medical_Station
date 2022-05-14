@@ -4,4 +4,4 @@ A medical website includes pages about appointments, vaccination records and vac
 
 - Technology:
 1. backend : Laravel, Firebase, XAMPP
-2. frontend : Vuejs
+2. frontend : Vue.js
