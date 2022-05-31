@@ -7,13 +7,13 @@
 
 <script>
     import NavBar from './NavBar.vue'
-   
+
     export default {
         components: {
             NavBar
         }
     }
-</script>   
+</script>
 
 <style>
     #app-container {
@@ -26,6 +26,6 @@
 
         width: 100%;
         height: 100%;
-    }
 
+    }
 </style>

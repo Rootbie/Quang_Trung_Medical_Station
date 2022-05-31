@@ -174,6 +174,23 @@
         width: 100%;
     }
 
+    .main-content::before {
+        content: "";
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: -1;
+
+        display: block;
+        width: 100%;
+        height: 100%;
+
+        background: linear-gradient(to right, #c1e3ff, #abc7ff);
+        background-repeat: none;
+        background-position: center;
+        background-size: cover;
+    }
+
     /* change fixed to absolute position so sidebar is under nav*/
     .b-sidebar-outer {
         position: absolute !important;
