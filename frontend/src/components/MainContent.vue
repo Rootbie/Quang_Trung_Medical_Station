@@ -185,7 +185,7 @@
         width: 100%;
         height: 100%;
 
-        background: linear-gradient(to right, #c1e3ff, #abc7ff);
+        background-color: #fff;
         background-repeat: none;
         background-position: center;
         background-size: cover;
